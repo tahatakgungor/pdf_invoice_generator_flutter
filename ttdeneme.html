@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial- scale=1.0">
+    <title>Document</title>
+    <style>
+        table,td{
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false">
+   
+    <h1 id="MyHeading">HESAPLAMA</h1>
+    <form action="">
+        <div>
+            <label for="num">Giris Çapı</label>
+            <input type="number" id="girisCapi">
+            <p id="log1"></p>
+        </div>
+        <div>
+            <label for="num">Giriş Redüksiyon</label>
+            <input type="number" id="girisRed">
+            <p id="log2"></p>
+        </div>
+    </form>
+    <div>
+        <input type="button" onclick="add();" value="Add" id ="MyButton">
+        <input type="button" onclick="clearTable();" value="Delete">
+    </div>
+    <div>
+        <table id="output" style="display: none;" width="100%">
+            <thead>
+                <td></td>
+                <td>Kafa1</td>
+                <td>Kafa2</td>
+                <td>Kafa3</td>
+                <td>Kafa4</td>
+                <td>Kafa5</td>
+                <td>Kafa6</td>
+                <td>Kafa7</td>
+                <td>Kafa8</td>
+                <td>Kafa9</td>
+                <td>Kafa10</td>
+                <td>Kafa11</td>
+                <td>Kafa12</td>
+                <td>Kafa13</td>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+    </div>
+    <div>
+        <br><br>
+        <button type="button" onclick="tableToCSV()">
+            download CSV
+        </button>
+    </div>
+    <div style="display:hidden;">
+        <script>
+            let created = false;
+            const input1= document.querySelector('#girisCapi');
+            const input2= document.querySelector('#girisRed');
+            const log1 = document.getElementById('log1');
+            const log2 = document.getElementById('log2');
+            
+            input1.addEventListener('change', updateValue);
+            input2.addEventListener('change', updateValue);
+            function updateValue(e) {
+            var l1 = log1.textContent;
+            l1 = e.target.value;
+            var l2 = log2.textContent;
+            l2 = e.target.value;
+            console.log(e.target.value);
+            if (document.getElementById("output").style.display === "block"){
+                document.getElementById("output").style.display="none";
+            }
+            else {
+                document.getElementById("output").style.display="none";
+            }
+            var output = document.querySelector("#output tbody");
+            output.innerHTML = "";
+            created = false;
+            }
+        
+            function add(){
+                if (!created){
+                    if (document.getElementById("output").style.display === "none"){
+                    document.getElementById("output").style.display="block";
+                }
+                else{
+                    document.getElementById("output").style.display="none";
+                }
+                var girisCapi = document.getElementById("girisCapi").value;
+                var girisRed = document.getElementById("girisRed").value;
+                var table = document.getElementById('table-body')
+                for(var y = 0; y <= 1; y++){ 
+                    var temp = girisRed;
+                    var haddeHesap = Math.sqrt((1-(temp))*Math.pow(girisCapi,2)).toFixed(2); 
+                    var temporary = haddeHesap
+                    console.log("asd"+haddeHesap)
+                    var row = table.insertRow(y)
+                    for(var i = 0; i <= 13; i++){
+                     
+                        if (i == 0 && y == 0){
+                            var cell = row.insertCell(i)
+                            cell.innerHTML = "Çap";
+                            continue;
+                        }
+                        else if(i == 0 && y == 1){ 
+                            var cell1 = row.insertCell(i)
+                            cell1.innerHTML = "Redüksiyon";
+                            continue;
+                        }
+                        if (y == 0){
+                            var cell1 = row.insertCell(i)
+                            
+                            if (i == 1) { 
+                                cell1.innerHTML = haddeHesap
+                            }
+                            else { 
+                                haddeHesap = Math.sqrt((1-(temp))*Math.pow(temporary,2)).toFixed(2);
+                                cell1.innerHTML = haddeHesap
+                                temp = temp - 0.01;
+                                console.log("Temp"+temp)
+                                console.log("Hadde"+haddeHesap)
+                            }
+                            
+                            
+                        }
+                        else if (y ==1){ 
+                            var cell2 = row.insertCell(i)
+                            cell2.innerHTML = girisRed;
+                            temp = (girisRed - 0.01).toFixed(2);
+                            girisRed = temp;
+                            
+                        }
+                    }
+                }
+          
+                created = true;
+                
+                }
+                
+        }
+        
+        
+        function tableToCSV() {
+         
+         // Variable to store the final csv data
+         var csv_data = [];
+        
+         // Get each row data
+         var rows = document.getElementsByTagName('tr');
+         for (var i = 0; i < rows.length; i++) {
+        
+             // Get each column data
+             var cols = rows[i].querySelectorAll('td,th');
+        
+             // Stores each csv row data
+             var csvrow = [];
+             for (var j = 0; j < cols.length; j++) {
+        
+                 // Get the text data of each cell
+                 // of a row and push it to csvrow
+                 csvrow.push(cols[j].innerHTML);
+             }
+        
+             // Combine each column value with comma
+             csv_data.push(csvrow.join(","));
+         }
+        
+         // Combine each row data with new line character
+         csv_data = csv_data.join('\n');
+        
+         // Call this function to download csv file 
+         downloadCSVFile(csv_data);
+        
+        }
+        
+        function downloadCSVFile(csv_data) {
+         
+         // Create CSV file object and feed
+         // our csv_data into it
+         CSVFile = new Blob([csv_data], {
+             type: "text/csv"
+         });
+        
+         // Create to temporary link to initiate
+         // download process
+         var temp_link = document.createElement('a');
+        
+         // Download csv file
+         temp_link.download = "CapReduksiyon.csv";
+         var url = window.URL.createObjectURL(CSVFile);
+         temp_link.href = url;
+        
+         // This link should not be displayed
+         temp_link.style.display = "none";
+         document.body.appendChild(temp_link);
+        
+         // Automatically click the link to
+         // trigger download
+         temp_link.click();
+         document.body.removeChild(temp_link);
+        }
+        
+        function clearTable() {
+            if (document.getElementById("output").style.display === "block"){
+                document.getElementById("output").style.display="none";
+            }
+            else {
+                document.getElementById("output").style.display="none";
+            }
+            var output = document.querySelector("#output tbody");
+            output.innerHTML = "";
+            created = false;
+        
+        }
+            </script>
+    </div>
+    
+</body>
+</html>
+

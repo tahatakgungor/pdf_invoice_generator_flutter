@@ -1,8 +1,9 @@
 class Product {
   final String name;
-  final double price;
-  final double vatInPercent;
+  final double cap;
+  final double fiyat;
+  final double reduksiyon;
   int amount = 0;
 
-  Product(this.name, this.price, this.vatInPercent);
+  Product(this.name, this.cap, this.fiyat, this.reduksiyon);
 }

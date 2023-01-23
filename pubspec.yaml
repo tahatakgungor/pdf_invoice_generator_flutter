@@ -11,19 +11,29 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+    
+  path_provider_android: 2.0.11  
+  html: ^0.15.1
   cupertino_icons: ^1.0.3
   pdf: ^3.8.2
   path_provider: ^2.0.5
   open_document: ^1.0.4
+  permission_handler: ^10.2.0
+  csv: ^5.0.1
+  fluttertoast: any
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.1
 
+  
+
 flutter:
   uses-material-design: true
-
+  fonts:
+    - family: Test
+      fonts:
+      - asset: assets/fonts/AbhayaLibre-Regular.ttf
   assets:
-    - assets/
+    - assets/images/
